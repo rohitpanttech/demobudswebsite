@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GO BUDS - Gaming Earbuds</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <!-- Import the <model-viewer> component -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Exo+2:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --neon-green: #39ff14;
+      --dark-green: #0d3d0d;
+      --forest-green: #1a4a1a;
+      --deep-black: #050505;
+      --smoke: rgba(57, 255, 20, 0.05);
+    }
+    
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--neon-green) var(--deep-black);
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Exo 2', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 50%, #1a1a1a 100%);
+      overflow-x: hidden;
+      color: #e5e5e5;
+    }
+    
+    .font-orbitron {
+      font-family: 'Orbitron', monospace;
+    }
+    
+    /* Parallax Layers */
+    .parallax-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .forest-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 50%, #1a1a1a 100%);
+      will-change: transform;
+    }
+    
+    /* Subtle gradient accent */
+    .trees {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(57, 255, 20, 0.08) 0%, transparent 70%);
+      will-change: transform;
+    }
+    
+    /* Fog layers */
+    .fog {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      animation: none;
+      will-change: transform;
+    }
+    
+    .fog-2 {
+      animation: none;
+      opacity: 0;
+    }
+    
+    /* Panther */
+    .panther-container {
+      position: absolute;
+      right: 5%;
+      bottom: 15%;
+      width: 400px;
+      height: 300px;
+      will-change: transform;
+      display: none;
+    }
+    
+    .panther {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 30px rgba(57, 255, 20, 0.3));
+    }
+    
+    .panther-body {
+      fill: #0a0a0a;
+    }
+    
+    .panther-eye {
+      fill: var(--neon-green);
+      animation: none;
+    }
+    
+    /* Glowing Platform */
+    .platform {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 200px;
+      display: none;
+    }
+    
+    .platform-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      animation: none;
+      filter: none;
+    }
+    
+    .platform-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 80px;
+      border: none;
+      border-radius: 50%;
+      box-shadow: none;
+      animation: none;
+    }
+    
+    .platform-ring-2 {
+      width: 350px;
+      height: 90px;
+      border-color: transparent;
+      animation: none;
+      animation-duration: 25s;
+    }
+    
+    /* 3D Earbuds */
+    .earbuds-scene {
+      perspective: 1000px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .earbuds-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      transform-style: preserve-3d;
+      animation: heroBudsFloat 8s ease-in-out infinite;
+    }
+    
+    @keyframes heroBudsFloat {
+      0%, 100% {
+        transform: translateY(0px) rotateX(10deg) rotateY(-10deg) scale(1);
+        filter: drop-shadow(0 40px 20px rgba(0, 0, 0, 0.3));
+      }
+      50% {
+        transform: translateY(-30px) rotateX(-5deg) rotateY(10deg) scale(1.05);
+        filter: drop-shadow(0 65px 25px rgba(0, 0, 0, 0.25));
+      }
+    }
+    
+    /* Neon Button */
+    .neon-btn {
+      position: relative;
+      padding: 16px 48px;
+      font-family: 'Orbitron', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--neon-green);
+      background: transparent;
+      border: 2px solid var(--neon-green);
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      text-shadow: 0 0 10px var(--neon-green);
+      box-shadow: 
+        0 0 20px rgba(57, 255, 20, 0.3),
+        inset 0 0 20px rgba(57, 255, 20, 0.1);
+    }
+    
+    .neon-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.4), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .neon-btn:hover {
+      background: var(--neon-green);
+      color: var(--deep-black);
+      box-shadow: 
+        0 0 25px var(--neon-green),
+        0 0 50px var(--neon-green);
+      text-shadow: none;
+      transform: scale(1.05);
+    }
+    
+    .neon-btn:hover::before {
+      left: 100%;
+    }
+    
+    /* Glassmorphism Card */
+    .glass-card {
+      background: rgba(20, 20, 20, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(57, 255, 20, 0.15);
+      border-radius: 20px;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .glass-card:hover {
+      border-color: rgba(57, 255, 20, 0.4);
+      box-shadow: 0 8px 32px rgba(57, 255, 20, 0.2), inset 0 1px 0 rgba(57, 255, 20, 0.1);
+      transform: translateY(-8px);
+      background: rgba(20, 20, 20, 0.8);
+    }
+    
+    /* Feature Icon Animation */
+    .feature-icon {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(57, 255, 20, 0.08);
+      border: 2px solid rgba(57, 255, 20, 0.3);
+      transition: transform 0.4s ease;
+      animation: pulse-icon-glow 2.5s infinite ease-in-out;
+    }
+    
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1);
+    }
+    
+    /* Product Showcase 3D */
+    .showcase-3d {
+      perspective: 1500px;
+    }
+    
+    .showcase-product {
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+    }
+    
+    /* Showcase hover effect */
+    .showcase-container .glass-card img {
+      transition: all 0.4s ease-in-out;
+    }
+    .showcase-container:hover .glass-card {
+      border-color: rgba(57, 255, 20, 0.6);
+      box-shadow: 0 0 60px rgba(57, 255, 20, 0.4);
+    }
+    .showcase-container:hover .glass-card img {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 25px var(--neon-green));
+    }
+
+    /* Scroll animations */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .fade-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .fade-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .fade-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .fade-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    /* Glow text */
+    .glow-text {
+      text-shadow: none;
+    }
+    
+    /* Navigation */
+    nav {
+      backdrop-filter: blur(20px);
+      background: rgba(15, 15, 15, 0.8);
+      border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .nav-link {
+      position: relative;
+      color: rgba(229, 229, 229, 0.7);
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--neon-green);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--neon-green);
+    }
+    
+    .nav-link:hover {
+      color: var(--neon-green);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    /* Product Card */
+    .product-card {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(transparent, rgba(57, 255, 20, 0.1), transparent 30%);
+      animation: cardRotate 4s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .product-card:hover::before {
+      opacity: 1;
+    }
+    
+    @keyframes cardRotate {
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse-icon-glow {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+        border-color: rgba(57, 255, 20, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(57, 255, 20, 0.7);
+        border-color: rgba(57, 255, 20, 0.7);
+      }
+    }
+
+    .add-to-cart-btn {
+      background: linear-gradient(135deg, rgba(57, 255, 20, 0.15) 0%, rgba(57, 255, 20, 0.08) 100%);
+      border: 1px solid rgba(57, 255, 20, 0.4);
+      color: var(--neon-green);
+      transition: all 0.3s ease;
+    }
+    
+    .add-to-cart-btn:hover {
+      background: rgba(57, 255, 20, 0.2);
+      box-shadow: 0 4px 12px rgba(57, 255, 20, 0.25);
+      transform: scale(1.05);
+    }
+    
+    .add-to-cart-btn.added {
+      background: var(--neon-green);
+      color: var(--deep-black);
+      cursor: default;
+      pointer-events: none;
+    }
+    
+    /* Review Stars */
+    .star {
+      color: var(--neon-green);
+      text-shadow: 0 0 10px var(--neon-green);
+    }
+    
+    /* Smoke particles */
+    .smoke-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(57, 255, 20, 0.3);
+      border-radius: 50%;
+      filter: blur(2px);
+      animation: none;
+      display: none;
+      animation-name: smoke-rise;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes smoke-rise {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      to {
+        transform: translateY(-100px) scale(1.5);
+        opacity: 0;
+      }
+    }
+    
+    /* Case animation */
+    .case-lid {
+      transform-origin: bottom center;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .case-open .case-lid {
+      transform: rotateX(-120deg);
+    }
+    
+    /* Section divider */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.3), transparent);
+    }
+    
+    /* Offer Banner */
+    .offer-banner {
+      border: 1px solid var(--neon-green);
+      background: radial-gradient(ellipse at center, rgba(57, 255, 20, 0.15) 0%, transparent 70%);
+      animation: pulse-glow 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(57, 255, 20, 0.6);
+        transform: scale(1.01);
+      }
+    }
+
+    .main-wrapper {
+      min-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full text-white">
+  <!-- Parallax Background -->
+  <div class="parallax-container">
+   <div class="forest-bg" id="forestBg"></div>
+   <div class="trees" id="trees"></div>
+   <div class="fog" id="fog1"></div>
+   <div class="fog fog-2" id="fog2"></div><!-- Glowing Platform -->
+   <div class="platform" id="platform">
+    <div class="platform-glow"></div>
+    <div class="platform-ring"></div>
+    <div class="platform-ring platform-ring-2"></div>
+   </div><!-- Panther -->
+   <div class="panther-container" id="panther">
+    <svg class="panther" viewbox="0 0 400 300"><path class="panther-body" d="M350 200 C380 180 390 150 370 130 C350 110 320 115 300 125 L280 100 C260 80 230 75 200 80 C170 85 150 100 140 120 L120 110 C100 100 70 105 50 130 C30 155 35 190 60 210 L40 240 C30 260 40 280 70 285 L100 280 L130 290 C150 295 180 290 200 275 L240 290 C260 295 290 290 310 275 L340 280 C360 275 375 260 370 240 L350 200Z" /> <ellipse class="panther-eye" cx="280" cy="120" rx="8" ry="10" /> <ellipse class="panther-eye" cx="320" cy="125" rx="8" ry="10" /> <path fill="#050505" d="M295 140 C300 145 305 145 310 140 L305 150 C302 152 298 152 295 150 Z" />
+    </svg>
+   </div><!-- Smoke Particles -->
+   <div id="smokeContainer"></div>
+  </div><!-- Main Content -->
+  <div class="main-wrapper relative z-10" id="mainContent">
+   <!-- Navigation -->
+   <nav class="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+     <a href="index.html" class="font-orbitron text-2xl font-bold tracking-wider"><span class="text-white">GO</span><span class="text-[#39ff14] glow-text">BUDS</span></a>
+     <div class="hidden md:flex items-center gap-8"><a href="index.html" class="nav-link text-sm font-medium tracking-wide">Home</a> <a href="#features" class="nav-link text-sm font-medium tracking-wide">Features</a> <a href="#showcase" class="nav-link text-sm font-medium tracking-wide">Showcase</a> <a href="#products" class="nav-link text-sm font-medium tracking-wide">Products</a> <a href="#reviews" class="nav-link text-sm font-medium tracking-wide">Reviews</a>
+     </div>
+     <div class="flex items-center gap-4">
+      <a href="cart.html" id="cart-icon-link" class="relative group">
+       <svg class="w-8 h-8 text-gray-400 group-hover:text-[#39ff14] transition-colors duration-300" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+       <span id="cart-count-badge" class="absolute -top-1 -right-2 bg-[#39ff14] text-black text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+      </a><!-- Mobile menu button -->
+      <div class="md:hidden">
+       <button id="mobile-menu-button" class="text-gray-400 hover:text-white focus:outline-none">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+       </button>
+      </div>
+     </div>
+    </div>
+   </nav><!-- Mobile Menu -->
+   <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-black/90 backdrop-blur-sm z-40 transition-opacity duration-300">
+    <div class="flex justify-end p-4">
+     <button id="mobile-menu-close-button" class="text-gray-400 hover:text-white">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+     </button>
+    </div>
+    <div class="flex flex-col items-center justify-center h-full -mt-20 space-y-6"><a href="index.html" class="mobile-nav-link text-2xl font-orbitron py-4 text-gray-300 hover:text-[#39ff14] transition-colors">Home</a> <a href="#features" class="mobile-nav-link text-2xl font-orbitron py-4 text-gray-300 hover:text-[#39ff14] transition-colors">Features</a> <a href="#showcase" class="mobile-nav-link text-2xl font-orbitron py-4 text-gray-300 hover:text-[#39ff14] transition-colors">Showcase</a> <a href="#products" class="mobile-nav-link text-2xl font-orbitron py-4 text-gray-300 hover:text-[#39ff14] transition-colors">Products</a> <a href="#reviews" class="mobile-nav-link text-2xl font-orbitron py-4 text-gray-300 hover:text-[#39ff14] transition-colors">Reviews</a>
+    </div>
+   </div><!-- Hero Section -->
+   <section class="min-h-screen flex flex-col items-center justify-center pt-20 px-4">
+    <div class="text-center mb-8 fade-up">
+     <h1 id="brandName" class="font-orbitron text-6xl md:text-8xl font-black tracking-wider mb-4 glow-text hero-glow" style="color: #39ff14;">GO BUDS</h1>
+     <p id="heroTagline" class="text-xl md:text-2xl text-gray-400 font-light tracking-widest">Where Gaming Meets Instinct</p>
+    </div><!-- 3D Earbuds -->
+    <div class="earbuds-scene mb-12 fade-up" style="transition-delay: 0.2s;">
+      <div class="earbuds-container">
+        <img src="buds 2.png" alt="GO BUDS Floating" class="w-full h-full object-contain">
+      </div>
+    </div><a href="#products" id="ctaButton" class="neon-btn fade-up" style="transition-delay: 0.4s;"> Buy Now </a> <!-- Scroll indicator -->
+    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 fade-up" style="transition-delay: 0.6s;">
+     <div class="w-6 h-10 border-2 border-[#39ff14] rounded-full flex justify-center opacity-50">
+      <div class="w-1 h-3 bg-[#39ff14] rounded-full mt-2 animate-bounce"></div>
+     </div>
+    </div>
+   </section><!-- Features Section -->
+   <section id="features" class="py-32 px-4">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-4 fade-up glow-text" style="color: #39ff14;">Predator Features</h2>
+     <p class="text-gray-400 text-center mb-16 fade-up" style="transition-delay: 0.1s;">Engineered for the ultimate gaming experience</p>
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8"><!-- Feature 1 -->
+      <div class="feature-card glass-card p-8 text-center fade-up" style="transition-delay: 0.1s;">
+       <div class="feature-icon mx-auto mb-6">
+        <svg class="w-10 h-10 text-[#39ff14] transition-transform duration-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+       </div>
+       <h3 class="font-orbitron text-lg font-semibold mb-2 text-[#39ff14]">40ms</h3>
+       <p class="text-gray-400 text-sm">Ultra Low Latency</p>
+      </div><!-- Feature 2 -->
+      <div class="feature-card glass-card p-8 text-center fade-up" style="transition-delay: 0.2s;">
+       <div class="feature-icon mx-auto mb-6">
+        <svg class="w-10 h-10 text-[#39ff14] transition-transform duration-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+        </svg>
+       </div>
+       <h3 class="font-orbitron text-lg font-semibold mb-2 text-[#39ff14]">HiFi</h3>
+       <p class="text-gray-400 text-sm">Best Sound Quality</p>
+      </div><!-- Feature 3 -->
+      <div class="feature-card glass-card p-8 text-center fade-up" style="transition-delay: 0.3s;">
+       <div class="feature-icon mx-auto mb-6">
+        <svg class="w-10 h-10 text-[#39ff14] transition-transform duration-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h3 class="font-orbitron text-lg font-semibold mb-2 text-[#39ff14]">PRO</h3>
+       <p class="text-gray-400 text-sm">Gaming Mode</p>
+      </div><!-- Feature 4 -->
+      <div class="feature-card glass-card p-8 text-center fade-up" style="transition-delay: 0.4s;">
+       <div class="feature-icon mx-auto mb-6">
+        <svg class="w-10 h-10 text-[#39ff14] transition-transform duration-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+       </div>
+       <h3 class="font-orbitron text-lg font-semibold mb-2 text-[#39ff14]">AAA</h3>
+       <p class="text-gray-400 text-sm">Premium Build</p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <div class="section-divider max-w-4xl mx-auto"></div><!-- 3D Showcase Section -->
+   <section id="showcase" class="py-32 px-4">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-4 fade-up glow-text" style="color: #ede6f0;">Upcoming Lauch !!</h2>
+     <p class="text-gray-400 text-center mb-16 fade-up" style="transition-delay: 0.1s;">A complete view of the GO BUDS Pro Plus.</p>
+     <div class="showcase-3d flex justify-center items-center fade-up showcase-container" style="transition-delay: 0.2s;">
+      <div class="glass-card p-4 md:p-8 rounded-3xl">
+       <img src="buds  5.png" alt="GO BUDS 360 View" class="max-w-lg w-full h-auto rounded-xl">
+      </div>
+     </div>
+    </div>
+   </section>
+   <div class="section-divider max-w-4xl mx-auto"></div><!-- Products Section -->
+   <section id="products" class="py-32 px-4">
+    <div class="max-w-6xl mx-auto">
+     <!-- Limited Time Offer Banner -->
+     <div class="offer-banner text-center mb-12 p-4 rounded-lg fade-up">
+      <p class="font-orbitron text-xl font-bold tracking-wider text-[#39ff14]">LIMITED TIME OFFER: 50% OFF!</p>
+     </div>
+     <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-4 fade-up glow-text" style="color: 
+     #05f3e7;">Choose Your Weapon</h2>
+     <p class="text-gray-400 text-center mb-16 fade-up" style="transition-delay: 0.1s;">Premium gaming audio engineered for victory</p>
+     <div class="grid md:grid-cols-3 gap-8"><!-- Product 1 -->
+      <div class="product-card glass-card p-6 fade-up group" style="transition-delay: 0.1s;">
+       <a href="product1.html" aria-label="View details for GO BUDS Pro">
+        <div class="relative bg-black rounded-xl mb-6 overflow-hidden h-64 cursor-pointer">
+         <img src="buds.png" alt="GO BUDS Pro" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105">
+         <div class="absolute top-2 right-2 bg-[#39ff14] text-black text-xs font-bold px-2 py-1 rounded font-orbitron">
+          NEW
+         </div>
+        </div>
+       </a>
+       <h3 class="font-orbitron text-xl font-bold mb-2 text-gray-100">GO BUDS Pro</h3>
+       <p class="text-gray-400 text-sm mb-4">Premium gaming earbuds with ANC</p>
+       <div class="flex items-center justify-between">
+        <div>
+         <div class="flex items-baseline gap-2">
+          <span id="pricePro" class="font-orbitron text-2xl font-bold text-[#39ff14]">₹2,499</span>
+          <span class="text-gray-500 line-through">₹4,999</span>
+         </div>
+         <div class="text-xs font-bold text-amber-400 mt-1">50% OFF</div>
+        </div><button class="add-to-cart-btn px-4 py-2 rounded-lg font-medium text-sm" data-product-id="pro" data-product-name="GO BUDS Pro" data-product-price="2499" data-product-image="buds.png">Add to Cart</button>
+       </div>
+      </div><!-- Product 2 -->
+      <div class="product-card glass-card p-6 fade-up group" style="transition-delay: 0.2s;">
+       <a href="product2.html" aria-label="View details for GO BUDS Plus">
+        <div class="relative bg-black rounded-xl mb-6 overflow-hidden h-64 cursor-pointer">
+         <img src="ChatGPT Image Mar 13, 2026, 04_35_17 PM.png" alt="GO BUDS Plus" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105">
+         <div class="absolute top-2 right-2 bg-gray-400 text-white text-xs font-bold px-2 py-1 rounded font-orbitron">
+          POPULAR
+         </div>
+        </div>
+       </a>
+       <h3 class="font-orbitron text-xl font-bold mb-2 text-gray-100">GO BUDS Plus</h3>
+       <p class="text-gray-400 text-sm mb-4">Lightweight gaming earbuds</p>
+       <div class="flex items-center justify-between">
+        <div>
+         <div class="flex items-baseline gap-2">
+          <span id="priceAir" class="font-orbitron text-2xl font-bold text-[#39ff14]">₹1,749</span>
+          <span class="text-gray-500 line-through">₹3,499</span>
+         </div>
+         <div class="text-xs font-bold text-amber-400 mt-1">50% OFF</div>
+        </div><button class="add-to-cart-btn px-4 py-2 rounded-lg font-medium text-sm" data-product-id="plus" data-product-name="GO BUDS Plus" data-product-price="1749" data-product-image="ChatGPT Image Mar 13, 2026, 04_35_17 PM.png">Add to Cart</button>
+       </div>
+      </div><!-- Product 3 -->
+      <div class="product-card glass-card p-6 fade-up group" style="transition-delay: 0.3s;">
+       <a href="product3.html" aria-label="View details for Go Buds Air">
+        <div class="relative bg-black rounded-xl mb-6 overflow-hidden h-64 cursor-pointer">
+         <img src="ChatGPT Image Mar 13, 2026, 04_51_47 PM.png" alt="Go Buds Air" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105">
+        <div class="absolute top-2 right-2 bg-amber-500 text-black text-xs font-bold px-2 py-1 rounded font-orbitron">
+         HOT
+        </div>
+        </div>
+       </a>
+       <h3 class="font-orbitron text-xl font-bold mb-2 text-gray-100">Go Buds Air</h3>
+       <p class="text-gray-400 text-sm mb-4">Extra case with fast charging</p>
+       <div class="flex items-center justify-between">
+        <div>
+         <div class="flex items-baseline gap-2">
+          <span id="priceCase" class="font-orbitron text-2xl font-bold text-[#39ff14]">₹649</span>
+          <span class="text-gray-500 line-through">₹1,299</span>
+         </div>
+         <div class="text-xs font-bold text-amber-400 mt-1">50% OFF</div>
+        </div><button class="add-to-cart-btn px-4 py-2 rounded-lg font-medium text-sm" data-product-id="air" data-product-name="Go Buds Air" data-product-price="649" data-product-image="ChatGPT Image Mar 13, 2026, 04_51_47 PM.png">Add to Cart</button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <div class="section-divider max-w-4xl mx-auto"></div><!-- Reviews Section -->
+   <section id="reviews" class="py-32 px-4">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-4 fade-up glow-text" style="color: #39ff14;">Predator Pack</h2>
+     <p class="text-gray-400 text-center mb-16 fade-up" style="transition-delay: 0.1s;">Join thousands of elite gamers</p>
+     <div class="grid md:grid-cols-3 gap-8"><!-- Review 1 -->
+      <div class="glass-card p-8 fade-up" style="transition-delay: 0.1s;">
+       <div class="flex mb-4"><span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span>
+       </div>
+       <p class="text-gray-300 mb-6 italic">"The low latency is insane. I can hear enemies before they see me. Total game changer for competitive FPS."</p>
+       <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#39ff14] to-[#0d3d0d] flex items-center justify-center font-orbitron font-bold">
+         AX
+        </div>
+        <div class="ml-4">
+         <p class="font-semibold">Alex Chen</p>
+         <p class="text-gray-500 text-sm">Pro Gamer</p>
+        </div>
+       </div>
+      </div><!-- Review 2 -->
+      <div class="glass-card p-8 fade-up" style="transition-delay: 0.2s;">
+       <div class="flex mb-4"><span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span>
+       </div>
+       <p class="text-gray-300 mb-6 italic">"Sound quality rivals my studio headphones. The gaming mode is perfect for positioning in battle royales."</p>
+       <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#39ff14] to-[#0d3d0d] flex items-center justify-center font-orbitron font-bold">
+         SK
+        </div>
+        <div class="ml-4">
+         <p class="font-semibold">Sarah Kim</p>
+         <p class="text-gray-500 text-sm">Streamer</p>
+        </div>
+       </div>
+      </div><!-- Review 3 -->
+      <div class="glass-card p-8 fade-up" style="transition-delay: 0.3s;">
+       <div class="flex mb-4"><span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span> <span class="star text-xl">★</span>
+       </div>
+       <p class="text-gray-300 mb-6 italic">"Premium build quality you can feel. The matte black finish with neon accents looks absolutely sick."</p>
+       <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#39ff14] to-[#0d3d0d] flex items-center justify-center font-orbitron font-bold">
+         MJ
+        </div>
+        <div class="ml-4">
+         <p class="font-semibold">Marcus Johnson</p>
+         <p class="text-gray-500 text-sm">Tech Reviewer</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <div class="section-divider max-w-4xl mx-auto"></div><!-- About Section -->
+   <section id="about-brand" class="py-32 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+     <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-4 fade-up glow-text" style="color: #39ff14;">Engineered for Instinct</h2>
+     <p class="text-gray-400 text-lg leading-relaxed mt-8 fade-up" style="transition-delay: 0.1s;">
+        At GO BUDS, we believe superior audio is the key to unlocking your true gaming potential. Our mission is to equip gamers with the tools they need to dominate the virtual battlefield. The GO BUDS lineup is engineered for victory, delivering lightning-fast response times and immersive soundscapes that put you right in the heart of the action.
+     </p>
+    </div>
+   </section>
+   <!-- Footer -->
+   <footer class="py-16 px-4 border-t border-[rgba(57,255,20,0.1)]">
+    <div class="max-w-6xl mx-auto text-center">
+     <div class="font-orbitron text-3xl font-bold mb-4"><span class="text-white">GO</span><span class="text-[#39ff14] glow-text">BUDS</span>
+     </div>
+     <p class="text-gray-500 mb-8">Unleash your predator instincts</p>
+     <div class="flex justify-center gap-6 mb-8"><a href="#" class="w-10 h-10 rounded-full border border-[rgba(57,255,20,0.3)] flex items-center justify-center text-[#39ff14] hover:bg-[rgba(57,255,20,0.1)] transition-all">
+       <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+       </svg></a> <a href="#" class="w-10 h-10 rounded-full border border-[rgba(57,255,20,0.3)] flex items-center justify-center text-[#39ff14] hover:bg-[rgba(57,255,20,0.1)] transition-all">
+       <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+       </svg></a> <a href="#" class="w-10 h-10 rounded-full border border-[rgba(57,255,20,0.3)] flex items-center justify-center text-[#39ff14] hover:bg-[rgba(57,255,20,0.1)] transition-all">
+       <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+       </svg></a>
+     </div>
+     <p class="text-gray-600 text-sm">© 2024 GO BUDS. All rights reserved.</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      brand_name: 'GO BUDS',
+      hero_tagline: 'Where Gaming Meets Instinct',
+      cta_button_text: 'Buy Now',
+      product_price: '$149.99',
+      background_color: '#050505',
+      surface_color: '#0a1e0a',
+      text_color: '#e5e5e5',
+      primary_action_color: '#39ff14',
+      secondary_action_color: '#1a4a1a'
+    };
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          // Update brand name
+          const brandNameEl = document.getElementById('brandName');
+          if (brandNameEl) brandNameEl.textContent = config.brand_name || defaultConfig.brand_name;
+          
+          // Update tagline
+          const taglineEl = document.getElementById('heroTagline');
+          if (taglineEl) taglineEl.textContent = config.hero_tagline || defaultConfig.hero_tagline;
+          
+          // Update CTA button
+          const ctaBtn = document.getElementById('ctaButton');
+          if (ctaBtn) ctaBtn.textContent = config.cta_button_text || defaultConfig.cta_button_text;
+          
+          // Update product price
+          const priceEl = document.getElementById('productPrice');
+          if (priceEl) priceEl.textContent = config.product_price || defaultConfig.product_price;
+          
+          // Update colors
+          const bgColor = config.background_color || defaultConfig.background_color;
+          const surfaceColor = config.surface_color || defaultConfig.surface_color;
+          const textColor = config.text_color || defaultConfig.text_color;
+          const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+          const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+          
+          document.body.style.background = bgColor;
+          document.querySelectorAll('.glass-card').forEach(el => {
+            el.style.background = `${surfaceColor}66`;
+            el.style.borderColor = `${primaryColor}33`;
+          });
+          document.querySelectorAll('.glow-text').forEach(el => {
+            el.style.color = primaryColor;
+            el.style.textShadow = `0 0 10px ${primaryColor}cc, 0 0 20px ${primaryColor}99, 0 0 40px ${primaryColor}66`;
+          });
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => window.elementSdk.setConfig({ background_color: value })
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => window.elementSdk.setConfig({ surface_color: value })
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => window.elementSdk.setConfig({ text_color: value })
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => window.elementSdk.setConfig({ primary_action_color: value })
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => window.elementSdk.setConfig({ secondary_action_color: value })
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['brand_name', config.brand_name || defaultConfig.brand_name],
+          ['hero_tagline', config.hero_tagline || defaultConfig.hero_tagline],
+          ['cta_button_text', config.cta_button_text || defaultConfig.cta_button_text],
+          ['product_price', config.product_price || defaultConfig.product_price]
+        ])
+      });
+    }
+
+    // Parallax scrolling effect
+    const mainContent = document.getElementById('mainContent');
+    const forestBg = document.getElementById('forestBg');
+    const trees = document.getElementById('trees');
+    const fog1 = document.getElementById('fog1');
+    const fog2 = document.getElementById('fog2');
+    const platform = document.getElementById('platform');
+    const panther = document.getElementById('panther');
+
+    
+    let ticking = false;
+    mainContent.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = mainContent.scrollTop;
+          const speed1 = scrollY * 0.3;
+          const speed2 = scrollY * 0.5;
+          const speed3 = scrollY * 0.2;
+          
+          if (forestBg) forestBg.style.transform = `translateY(${speed1}px)`;
+          if (trees) trees.style.transform = `translateY(${speed2}px)`;
+          if (fog1) fog1.style.transform = `translateY(${speed3}px)`;
+          if (fog2) fog2.style.transform = `translateY(${speed3 * 0.8}px)`;
+          if (platform) {
+            platform.style.transform = `translate(-50%, -50%) translateY(${speed1 * 0.5}px)`;
+            platform.style.opacity = Math.max(0, 1 - scrollY / 800);
+          }
+          if (panther) {
+            panther.style.transform = `translateY(${speed2 * 0.3}px) translateX(${speed1 * 0.1}px)`;
+            panther.style.opacity = Math.max(0, 1 - scrollY / 1000);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // Scroll reveal animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-up, .fade-left, .fade-right').forEach(el => {
+      observer.observe(el);
+    });
+
+    // 3D Product Showcase rotation
+    const showcaseProduct = document.getElementById('showcaseProduct');
+    const interactiveCase = document.getElementById('interactiveCase');
+    const caseLid = document.getElementById('caseLid');
+    const insideBuds = document.getElementById('insideBuds');
+    
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let rotateX = 0;
+    let rotateY = 0;
+    let caseOpen = false;
+
+    if (showcaseProduct) {
+      showcaseProduct.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        showcaseProduct.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        rotateY += deltaX * 0.5;
+        rotateX -= deltaY * 0.5;
+        rotateX = Math.max(-30, Math.min(30, rotateX));
+        showcaseProduct.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        startX = e.clientX;
+        startY = e.clientY;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        if (showcaseProduct) showcaseProduct.style.cursor = 'grab';
+      });
+
+      // Click to open/close case
+      interactiveCase.addEventListener('click', () => {
+        caseOpen = !caseOpen;
+        if (caseOpen) {
+          caseLid.style.transform = 'rotateX(-70deg)';
+          insideBuds.style.opacity = '1';
+        } else {
+          caseLid.style.transform = 'rotateX(0deg)';
+          insideBuds.style.opacity = '0';
+        }
+      });
+    }
+
+    // Smoke particles
+    const smokeContainer = document.getElementById('smokeContainer');
+    
+    function createSmokeParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'smoke-particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.bottom = Math.random() * 20 + '%';
+      particle.style.animationDelay = Math.random() * 5 + 's';
+      particle.style.animationDuration = (5 + Math.random() * 5) + 's';
+      smokeContainer.appendChild(particle);
+      
+      setTimeout(() => {
+        particle.remove();
+      }, 10000);
+    }
+
+    // Create initial smoke particles
+    for (let i = 0; i < 15; i++) {
+      setTimeout(() => createSmokeParticle(), i * 300);
+    }
+
+    // Continuously create smoke
+    setInterval(createSmokeParticle, 800);
+
+    function updateCartIconCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const badge = document.getElementById('cart-count-badge');
+        if (badge) {
+            if (totalQuantity > 0) {
+                badge.textContent = totalQuantity;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+    }
+
+    function handleAddToCart(button) {
+        if (button.classList.contains('added')) return;
+
+        const productId = button.dataset.productId;
+        const productName = button.dataset.productName;
+        const productPrice = parseFloat(button.dataset.productPrice);
+        const productImageSrc = button.dataset.productImage;
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existingProductIndex = cart.findIndex(item => item.id === productId);
+
+        if (existingProductIndex > -1) {
+            cart[existingProductIndex].quantity += 1;
+        } else {
+            cart.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                quantity: 1,
+                image: productImageSrc
+            });
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        updateCartIconCount();
+
+        const originalText = button.textContent;
+        button.textContent = 'Added! ✓';
+        button.classList.add('added');
+
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.classList.remove('added');
+        }, 2000);
+    }
+
+    // Use event delegation for all "Add to Cart" buttons
+    document.body.addEventListener('click', function(e) {
+        if (e.target.matches('.add-to-cart-btn')) {
+            handleAddToCart(e.target);
+        }
+    });
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+        });
+    }
+
+    if (mobileMenuCloseButton && mobileMenu) {
+        mobileMenuCloseButton.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+    }
+
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (mobileMenu) mobileMenu.classList.add('hidden');
+        });
+    });
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Trigger initial animations
+    setTimeout(() => {
+      document.querySelectorAll('.fade-up, .fade-left, .fade-right').forEach((el, index) => {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          setTimeout(() => el.classList.add('visible'), index * 100);
+        }
+      });
+    }, 100);
+
+    updateCartIconCount();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db8da6060704bda',t:'MTc3MzM4MTk5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
